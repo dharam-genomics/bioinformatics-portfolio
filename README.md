@@ -13,5 +13,3 @@ This repository documents my journey of learning Python, Git, Linux, and Bioinfo
 - Share projects publicly
 
 Author: Dharam Nandan
-
-Trying to add something to check
