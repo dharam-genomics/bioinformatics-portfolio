@@ -1,0 +1,10 @@
+name="Dharam"
+profession="Bioinformatician"
+experience=10
+height=167.5
+is_learning=True
+print(name)
+print(profession)
+print(experience)
+print(height)
+print(is_learning)
