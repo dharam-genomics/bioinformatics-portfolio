@@ -1,0 +1,18 @@
+coverage = (10, 30, 34, "chr2", 39)
+#coverage[5] = 89
+print("Printing the touple as it is: ")
+print(coverage)
+print("Printing some indexes of tuple( 0, -1 and 4): ")
+print(coverage[0], coverage[-1], coverage[4])
+print("Printing touple using loop and also the type it stored: ")
+for item in coverage:
+    print(item)
+    print(type(item))
+print("Printing the length of touple using len() function:")
+print(len(coverage))
+x = ("Dharam")
+print("Printing the type of vaule stored in a variable x and its value: ")
+print(type(x), x)
+print("Printing the type of vaule stored in a variable x and its value: ")
+x = ("Dharam",)
+print(type(x), x)
