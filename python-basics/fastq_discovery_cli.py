@@ -3,6 +3,7 @@ import sys
 fastqlist = []
 if len(sys.argv) < 2:
     print("Error: Please provide an input directory.")
+    sys.exit(1)
 else:
     dirname = sys.argv[1]
     if os.path.exists(dirname):
@@ -14,8 +15,10 @@ else:
                     fastqlist.append(name)
         else:
             print("The input folder name", dirname, "is not a directory")
+            sys.exit(1)
     else:
         print("The entered directory path", dirname, "does not exists")
+        sys.exit(1)
 print("FASTQ files found: ")
 for fqfiles in fastqlist:
     print(fqfiles)
