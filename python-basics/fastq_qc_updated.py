@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 def count_reads(filename):
     sample = Path(filename)
@@ -14,9 +15,19 @@ def check_qc(reads, minimum_reads):
 
     return status
 
-fq_path = Path("data")
+if len(sys.argv) < 3:
+    print("Usage: python3 fastq_qc_updated.py <directory> <minimum reads number>")
+    sys.exit(1)
+fq_path = Path(sys.argv[1])
+if not fq_path.is_dir():
+    print("The directory is not a valid directory!")
+    sys.exit(1)
+try:
+    minimum_reads = int(sys.argv[2])
+except ValueError:
+    print("Minimum reads must be an integer.")
+    sys.exit(1)
 results = {}
-minimum_reads = 4
 for fq_file in fq_path.glob("*.fastq"):
     reads = count_reads(fq_file)
     status = check_qc(reads, minimum_reads)
