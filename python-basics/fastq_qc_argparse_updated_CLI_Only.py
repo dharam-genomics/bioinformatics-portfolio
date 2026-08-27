@@ -29,6 +29,13 @@ def print_report(results):
     print("Passed samples: ", passed)
     print("Failed samples: ", failed)
 
+def save_report(results, output_file):
+    with open(output_file, "w") as file:
+        for sample, details in results.items():
+            file.write(
+                f"{sample}: {details['reads']} reads: {details['status']}\n"
+            )
+
 def main():
     parser = argparse.ArgumentParser(description="Perform basic Fastq read-count QC")
     parser.add_argument("--input", required=True, help="Input directory containing the FASTQ files")
@@ -42,6 +49,7 @@ def main():
     
     result = run_qc(fq_path, args.min_reads)
     print_report(result)
+    save_report(result, "fastq_qc_report.txt")
     
 
 if __name__ == "__main__":
