@@ -10,17 +10,23 @@ def format_report(results):
     report += "----------------------------------\n"
     passed = 0
     failed = 0
+    invalid = 0
     for sample, details in results.items():
-        report += f"| {sample} : {details['reads']} reads : {details['status']} |\n"
         if details["status"] == "PASS":
+            report += f"| {sample} : {details['reads']} reads : {details['status']} |\n"
             passed += 1
-        else:
+        elif details["status"] == "FAIL":
+            report += f"| {sample} : {details['reads']} reads : {details['status']} |\n"
             failed += 1
+        else:
+            report += f"| {sample} : {details['status']} : Reason: {details['error']} |\n"
+            invalid += 1
     
     report += "----------------------------------\n"
     report += f"Total samples: {len(results)}\n"
     report += f"Passed samples: {passed}\n"
     report += f"Failed samples: {failed}\n"
+    report += f"Invalid samples: {invalid}\n"
     
     return report
 
