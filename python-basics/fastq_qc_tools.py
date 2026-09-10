@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 class FastqValidationError(Exception):
     pass
@@ -40,14 +41,21 @@ def run_qc(fastq_dir, minimum_reads):
     results = {}
 
     for file in fastq_dir.glob("*.fastq"):
+        logging.info("Processing sample: %s", file.name)
         try:
             reads = count_reads(file)
+            logging.info("Reads found: %s", reads)
             status = check_qc(reads, minimum_reads)
+            if status == "FAIL":
+                logging.warning("%s failed QC: low read count (%s reads, minimum %s)", file.name, reads, minimum_reads)
+            else:
+                logging.info("%s passed QC", file.name)
             results[file.name] = {
             "reads": reads,
             "status": status
         }
         except FastqValidationError as e:
+            logging.error("%s is invalid: %s", file.name, str(e))
             results[file.name] = {"reads": None, "status": "INVALID", "error": str(e)}
             continue
 

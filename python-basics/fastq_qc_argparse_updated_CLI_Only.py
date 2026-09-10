@@ -2,6 +2,9 @@ import sys
 from pathlib import Path
 import argparse
 from fastq_qc_tools import run_qc
+import logging
+
+logging.basicConfig(filename="fastq_qc.log", level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 def format_report(results):
     report = ""   
