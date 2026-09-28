@@ -1,5 +1,6 @@
+from pathlib import Path
 import pytest
-from fastq_qc_tools import check_qc, validate_record, FastqValidationError, count_reads, run_qc
+from fastq_qc_tools import check_qc, validate_record, FastqValidationError, count_reads, run_qc, QCConfig
 
 @pytest.fixture
 def data_dir(tmp_path):
@@ -72,12 +73,19 @@ ATGC
 
 def test_run_qc(data_dir):
 
-    results = run_qc(data_dir, minimum_reads=4)
-    assert results["good.fastq"]["reads"] == 8
-    assert results["low_reads.fastq"]["reads"] == 2
-    assert results["good.fastq"]["status"] == "PASS"
-    assert results["low_reads.fastq"]["status"] == "FAIL"
-    assert results["invalid.fastq"]["status"] == "INVALID"
+    #results = run_qc(data_dir, minimum_reads=4)
+    config = QCConfig(input_dir=data_dir, minimum_reads=4,output_file=Path("report.txt"))
+    results = run_qc(config)
+    #assert results["good.fastq"]["reads"] == 8
+    #assert results["low_reads.fastq"]["reads"] == 2
+    #assert results["good.fastq"]["status"] == "PASS"
+    #assert results["low_reads.fastq"]["status"] == "FAIL"
+    #assert results["invalid.fastq"]["status"] == "INVALID"
+    assert results["good.fastq"].reads == 8
+    assert results["low_reads.fastq"].reads == 2
+    assert results["good.fastq"].status == "PASS"
+    assert results["low_reads.fastq"].status == "FAIL"
+    assert results["invalid.fastq"].status == "INVALID"
 
 def test_check_qc_pass():
     result = check_qc(8, 6)
