@@ -1,0 +1,26 @@
+import pandas as pd
+import numpy as np
+df=pd.read_csv("ngs_qc.csv")
+#print(df)
+#print(df.shape)
+#df.info()
+#print(df.isna().sum())
+#print(df[df["reads"] < 0])
+#print(df[df["mean_depth"] < 0])
+#print(df[~df["status"].isin(["PASS","FAIL"])])
+#print(df["sample"].duplicated().sum())
+#print(df[df["sample"].duplicated(keep=False)])
+invalid_val=df[(df["reads"] < 0) | (df["mean_depth"] < 0)| (~df["status"].isin(["PASS", "FAIL"]))| (df["sample"].duplicated(keep=False))]
+print(invalid_val)
+conditions = [(df["reads"] >= 2000) & (df["mean_depth"] >= 40), (df["reads"] >= 1000) & (df["mean_depth"] >= 25)]
+choices = ("HIGH", "MEDIUM")
+df["qc_categories"] = np.select(conditions, choices, default="LOW")
+print(df)
+batch_summary = pd.pivot_table(df, values="reads", index="batch", columns="qc_categories", aggfunc="count", fill_value=0)
+print(batch_summary)
+batch_matrix = df.groupby("batch").agg(average_reads=("reads", "mean"), average_depth=("mean_depth", "mean"))
+print(batch_matrix)
+batch_summary = batch_summary.reset_index()
+batch_matrix = batch_matrix.reset_index()
+final_matrix = pd.merge(batch_summary,batch_matrix, on="batch")
+print(final_matrix)
